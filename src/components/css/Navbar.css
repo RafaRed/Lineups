@@ -1,0 +1,16 @@
+.navbar{
+    margin: 10px;
+}
+
+.logo{
+    display: flex;
+    font-weight: 800;
+    font-size: 2.5rem;
+    align-items: center;
+    gap: 20px;
+}
+
+.logoimg{
+    height: 60px;
+    width: 60px;
+}
