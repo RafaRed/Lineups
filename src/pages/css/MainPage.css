@@ -1,0 +1,120 @@
+.main-page {
+	background-color: #161616;
+	width: 100%;
+
+	padding-top: 150px;
+	display: flex;
+	justify-content: center;
+}
+.main-page .wrapper {
+	width: 40%;
+	min-width: 300px;
+	margin-bottom: 150px;
+}
+.main-page .title {
+	height: 100px;
+	display: flex;
+	gap: 20px;
+	align-items: center;
+}
+.main-page .title .bar {
+	background-color: #ff4655;
+	width: 3px;
+	height: 100%;
+}
+.main-page .title p {
+	font-weight: 800;
+	font-size: 2.6rem;
+}
+
+.main-page .title .red-text {
+	color: #ff4655;
+}
+
+.main-page .block {
+	margin-top: 30px;
+	background-color: #232323;
+	padding: 20px;
+	border-radius: 10px;
+}
+
+.main-page .block-title {
+	font-weight: 800;
+	font-size: 2rem;
+}
+
+.main-page .main-text {
+	border-bottom: 2px solid #ff4655;
+}
+
+.main-page .agents-list {
+	margin-top: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.main-page .maps-list {
+	margin-top: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.main-page .map {
+	padding: 10px;
+	border-radius: 10px;
+	background-color: #424242;
+	box-shadow: 2px 3px 5px #1d1d1d;
+	cursor: pointer;
+}
+
+.main-page .selected-map {
+	padding: 10px;
+	border-radius: 10px;
+	background-color: #d1d1d1;
+	box-shadow: 2px 3px 5px #1d1d1d;
+	color:#000000;
+	cursor: pointer;
+}
+
+.main-page .agent {
+	height: 50px;
+	width: 50px;
+	padding: 1px;
+	border-radius: 10px;
+	background-color: #424242;
+	box-shadow: 2px 3px 5px #1d1d1d;
+	cursor: pointer;
+}
+
+.main-page .selected-agent {
+	height: 50px;
+	width: 50px;
+	padding: 1px;
+	border-radius: 10px;
+	background-color: #d1d1d1;
+	box-shadow: 2px 3px 5px #1d1d1d;
+	cursor: pointer;
+}
+.main-page .agent img {
+	height: 50px;
+	width: 50px;
+}
+
+.main-page .maps-found {
+	margin-top: 10px;
+}
+
+.main-page .create-new {
+	margin-top: 30px;
+	background-color: #ff4655;
+	padding: 20px;
+	border-radius: 10px;
+	border: none;
+	font-weight: 800;
+	width: 100%;
+	font-size: 2rem;
+	box-shadow: 2px 3px 5px #1d1d1d;
+	cursor: pointer;
+}

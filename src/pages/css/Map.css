@@ -1,0 +1,64 @@
+.map-page {
+	background-color: #161616;
+	width: 100%;
+	padding-top: 100px;
+	display: flex;
+
+}
+
+.map-page .block {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+	background-color: #232323;
+	padding: 20px;
+	border-radius: 10px;
+    left: 15px;
+}
+
+.map-page .title{
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ff4655;
+    text-transform: uppercase;
+}
+
+.map-page .menu-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+	border-bottom: 2px solid #ff4655;
+}
+
+.map-page .save-button{
+    background-color: #585349;
+    width: 150px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    
+}
+
+.map-page .add-lineup-button{
+    background-color: #FF4655;
+    width: 150px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+}
+
+.map-page .options-block {
+    position: fixed;
+    right: 15px;
+    display: flex;
+    flex-direction: column;
+	background-color: #232323;
+	padding: 20px;
+	border-radius: 10px;
+    gap: 10px;
+}
+
+.map-page .map-img{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
