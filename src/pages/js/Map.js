@@ -71,13 +71,9 @@ function Map() {
 			</div>
 			
 			<div className="map-img">
-			<PanZoom  boundaryRatioVertical={0.05} 
-      boundaryRatioHorizontal={0.05}
-	  maxZoom={1}
-	  minZoom={0.3}
-      enableBoundingBox>
-				<svg id="map" width="1024" height="1024" viewBox="0 0 1200 1200" onClick={(e) => mapClick(e)}>
-					<image href="images/maps/ascent.png" width="1024" height="1024"  />
+
+				<svg id="map" width="1024" height="1024" viewBox="0 0 1536 1536" >
+					<image href="images/maps/ascent.png" width="1024" height="1024" onClick={(e) => mapClick(e)} />
 					<g id="pixel0">
 						<svg id="pixel-box">
 							<rect x="157" y="248" rx="10" ry="10" width="35" height="35" />
@@ -104,7 +100,6 @@ function Map() {
 						<line x1="175" y1="285" x2="175" y2="498" stroke-width="2" stroke="white"/>
 					</g>
 				</svg>
-				</PanZoom>
 			</div>
 			
 		</div>
