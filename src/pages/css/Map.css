@@ -13,7 +13,7 @@
 	background-color: #232323;
 	padding: 20px;
 	border-radius: 10px;
-    left: 15px;
+    left: 20px;
 }
 
 .map-page .title{
@@ -35,6 +35,7 @@
     height: 30px;
     border: none;
     border-radius: 5px;
+    cursor: pointer;
     
 }
 
@@ -44,11 +45,34 @@
     height: 30px;
     border: none;
     border-radius: 5px;
+    cursor: pointer;
+}
+
+.map-page .config-block{
+    position: fixed;
+    right: 20px;
 }
 
 .map-page .options-block {
-    position: fixed;
-    right: 15px;
+    
+    
+    display: flex;
+    flex-direction: column;
+	background-color: #232323;
+	padding: 20px;
+	border-radius: 10px;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.map-page .map-img{
+    margin-top: 100px;
+    margin-left: 100px;
+    display: flex;
+    justify-content: center;
+}
+
+.map-page .lineup-block {
     display: flex;
     flex-direction: column;
 	background-color: #232323;
@@ -57,8 +81,83 @@
     gap: 10px;
 }
 
-.map-page .map-img{
-    width: 100%;
+.map-page .line-block {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+	background-color: #424242;
+	padding: 20px;
+	border-radius: 10px;
+    left: 15px;
+}
+
+.map-page .line-title{
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+.map-page .line-img{
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.map-page .line-button{
+    margin-top: 10px;
+    background-color: #FF4655;
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    font-weight: 800;
+    box-shadow: 2px 3px 5px #1d1d1d;
+    cursor: pointer;
+}
+
+.map-page .abilitys-select{
+    margin-top: 10px;
+}
+.map-page .ability-button{
+    background-color: #565656;
+    border: none;
+    border-radius: 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.map-page .ability-img{
+    width: 25px;
+    height: 25px;
+    padding: 5px;
+}
+
+.map-page .line-input{
+    margin-top: 10px;
+    border-radius: 10px;
+    padding: 10px;
+    border: none;
+    font-weight: 800;
+
+    background-color: #FF4655;
+}
+
+.map-page .line-add{
+    height: 40px;
+    background-color: #FF4655;
+    font-weight: 800;
+    border:none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#pixel-box{
+    fill:#4D5178;
+    stroke: #FFFFFF;
+    stroke-width: 2px;
+}
+
+#pixel{
+    cursor: pointer;
+}
+
+#agent{
+    cursor: pointer;
 }
