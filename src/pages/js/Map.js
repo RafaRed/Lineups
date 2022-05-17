@@ -15,6 +15,7 @@ function Map() {
 	const _agent_path = "images/agents/";
 	const _ability_path = "images/abilitys/";
 	const [action, setAction] = useState(0);
+	const [unlockAction,setUnlockAction] = useState(0)
 	const [selectedAbility, setSelectedAbility] = useState(1);
 	const [pixels, setPixels] = useState([
 		
@@ -38,7 +39,9 @@ function Map() {
 					<SetAgentLayout
 						_agentImg={_agentImg}
 						action={action}
-						setAction={setAction}></SetAgentLayout>
+						setAction={setAction}
+						unlockAction={unlockAction}
+						setUnlockAction={setUnlockAction}></SetAgentLayout>
 					<SetAbility
 						_abilitys={_abilitys}
 						selectedAbility={selectedAbility}
@@ -50,7 +53,9 @@ function Map() {
 						_agents={_agents}
 						_agent_id={_agent_id}
 						action={action}
-						setAction={setAction}></AbilityPosition>
+						setAction={setAction}
+						unlockAction={unlockAction}
+						setUnlockAction={setUnlockAction}></AbilityPosition>
 					<VideoUrl></VideoUrl>
 					<button className="line-add">ADD</button>
 				</div>
@@ -66,7 +71,11 @@ function Map() {
 				_agent_id={_agent_id}
 				_agent_path={_agent_path}
 				_ability_path={_ability_path}
-				_agents={_agents}></MapArea>
+				_agents={_agents}
+				unlockAction={unlockAction}
+				setUnlockAction={setUnlockAction}>
+					
+				</MapArea>
 		</div>
 	);
 }
@@ -77,7 +86,7 @@ function SetAgentLayout(props) {
 			<p className="line-title">1. SET AGENT POSITION</p>
 			<button className="line-button" onClick={() => setAgent(props.setAction)}>
 				<img className="line-img" src={props._agentImg} />{" "}
-				{props.action === 1 ? "PLACE AGENT ON MAP" : "SET"}
+				{props.action === 1 ? "PLACE AGENT ON MAP" : props.unlockAction > 3 ? "UPDATE" : "SET"}
 			</button>
 		</div>
 	);
@@ -144,7 +153,7 @@ function AbilityPosition(props) {
 			<p className="line-title">3. SET ABILITY POSITION</p>
 			<button className="line-button" onClick={() => setAbility(props.setAction)}>
 				<img className="line-img" src={props._ability_path+props._agents[props._agent_id]+"/"+props.selectedAbility+".png"} />
-				{props.action === 4 ? "PLACE ABILITY ON MAP" : "SET"}
+				{props.action === 4 ? "PLACE ABILITY ON MAP" : props.unlockAction > 4 ? "UPDATE" : "SET"}
 			</button>
 		</div>
 	);
@@ -269,10 +278,22 @@ function mapClick(evt, props) {
 	var x = evt.clientX - dim.left;
 	var y = evt.clientY - dim.top;
 	if (props.action === 1) {
-		placeAgent(x * 1.5 - 15, y * 1.5 - 15, props);
+		if(props.unlockAction > 2){
+			updateAgent(x * 1.5 - 15, y * 1.5 - 15, props);
+		}
+		else{
+			placeAgent(x * 1.5 - 15, y * 1.5 - 15, props);
+		}
+		
+		if(props.unlockAction < 3){
+			props.setUnlockAction(3);
+		}
 	}
 	if (props.action === 4) {
 		placeAbility(x * 1.5 - 15, y * 1.5 - 15, props);
+		if(props.unlockAction < 5){
+			props.setUnlockAction(5);
+		}
 	}
 }
 
@@ -281,6 +302,15 @@ function placeAgent(x, y, props) {
 	oldPixels.push({ "agent-id": props._agent_id, "agent-x": x, "agent-y": y });
 	props.setPixels(oldPixels);
 	props.setAction(2);
+}
+
+function updateAgent(x, y, props) {
+	var oldPixels = [...props.pixels];
+	oldPixels[oldPixels.length-1]["agent-id"] = props._agent_id
+	oldPixels[oldPixels.length-1]["agent-x"] = x
+	oldPixels[oldPixels.length-1]["agent-y"] = y
+	props.setPixels(oldPixels);
+	props.setAction(props.unlockAction);
 }
 
 function placeAbility(x, y, props) {
