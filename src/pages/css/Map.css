@@ -31,7 +31,7 @@
 
 .map-page .save-button{
     background-color: #585349;
-    width: 150px;
+
     height: 30px;
     border: none;
     border-radius: 5px;
@@ -41,7 +41,6 @@
 
 .map-page .add-lineup-button{
     background-color: #FF4655;
-    width: 150px;
     height: 30px;
     border: none;
     border-radius: 5px;
@@ -90,9 +89,23 @@
     left: 15px;
 }
 
+.map-page .line-block-disabled {
+    display: flex;
+    flex-direction: column;
+	background-color: #363636;
+	padding: 20px;
+	border-radius: 10px;
+    left: 15px;
+}
+
 .map-page .line-title{
     font-weight: 800;
     font-size: 0.9rem;
+}
+.map-page .line-block-disabled .line-title{
+    font-weight: 800;
+    font-size: 0.9rem;
+    color:#B7B7B7;
 }
 .map-page .line-img{
     width: 20px;
@@ -113,6 +126,20 @@
     cursor: pointer;
 }
 
+.map-page .line-block-disabled .line-button{
+    margin-top: 10px;
+    background-color: #A8434B;
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    font-weight: 800;
+    box-shadow: 2px 3px 5px #1d1d1d;
+    cursor: default;
+    color: #B7B7B7;
+}
+
 .map-page .abilitys-select{
     margin-top: 10px;
 }
@@ -123,12 +150,27 @@
     margin-right: 5px;
     cursor: pointer;
 }
+.map-page .line-block-disabled .ability-button{
+    background-color: #565656;
+    border: none;
+    border-radius: 10px;
+    margin-right: 5px;
+    cursor: default;
+}
+
 .map-page .ability-button-selected{
     background-color: #D4D4D4;
     border: none;
     border-radius: 10px;
     margin-right: 5px;
     cursor: pointer;
+}
+.map-page .line-block-disabled .ability-button-selected{
+    background-color: #565656;
+    border: none;
+    border-radius: 10px;
+    margin-right: 5px;
+    cursor:default;
 }
 .map-page .ability-img{
     width: 25px;
