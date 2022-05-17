@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../css/Map.css";
-import { PanZoom } from 'react-easy-panzoom'
+import { PanZoom } from "react-easy-panzoom";
 
 function Map() {
+	const _agent_id = 0;
 	const _agentImg = "images/agents/fade.png";
 	const _abilitys = [
 		"images/abilitys/fade/1.png",
@@ -10,8 +11,14 @@ function Map() {
 		"images/abilitys/fade/3.png",
 		"images/abilitys/fade/4.png",
 	];
-	const _selectedAbility = "images/abilitys/fade/1.png";
-
+	const _agents = ["fade"];
+	const _agent_path = "images/agents/";
+	const _ability_path = "images/abilitys/";
+	const [action, setAction] = useState(0);
+	const [selectedAbility, setSelectedAbility] = useState(1);
+	const [pixels, setPixels] = useState([
+		
+	]);
 	return (
 		<div className="map-page">
 			<div className="block">
@@ -28,90 +35,260 @@ function Map() {
 
 				<div className="lineup-block">
 					<p className="menu-title">ADD LINEUP</p>
-
-					<div className="line-block">
-						<p className="line-title">1. SET AGENT POSITION</p>
-						<button className="line-button">
-							<img className="line-img" src={_agentImg} /> SET
-						</button>
-					</div>
-
-					<div className="line-block">
-						<p className="line-title">2. SET AGENT ABILITY</p>
-						<div className="abilitys-select">
-							<button className="ability-button">
-								<img className="ability-img" src={_abilitys[0]} />
-							</button>
-							<button className="ability-button">
-								<img className="ability-img" src={_abilitys[1]} />
-							</button>
-							<button className="ability-button">
-								<img className="ability-img" src={_abilitys[2]} />
-							</button>
-							<button className="ability-button">
-								<img className="ability-img" src={_abilitys[3]} />
-							</button>
-						</div>
-					</div>
-
-					<div className="line-block">
-						<p className="line-title">3. SET ABILITY POSITION</p>
-						<button className="line-button">
-							<img className="line-img" src={_selectedAbility} /> SET
-						</button>
-					</div>
-
-					<div className="line-block">
-						<p className="line-title">4. VIDEO URL</p>
-						<input placeholder="youtube.com/xxx" className="line-input"></input>
-					</div>
-
+					<SetAgentLayout
+						_agentImg={_agentImg}
+						action={action}
+						setAction={setAction}></SetAgentLayout>
+					<SetAbility
+						_abilitys={_abilitys}
+						selectedAbility={selectedAbility}
+						setSelectedAbility={setSelectedAbility}
+						setAction={setAction}></SetAbility>
+					<AbilityPosition
+						selectedAbility={selectedAbility}
+						_ability_path={_ability_path}
+						_agents={_agents}
+						_agent_id={_agent_id}
+						action={action}
+						setAction={setAction}></AbilityPosition>
+					<VideoUrl></VideoUrl>
 					<button className="line-add">ADD</button>
 				</div>
 			</div>
-			
-			<div className="map-img">
 
-				<svg id="map" width="1024" height="1024" viewBox="0 0 1536 1536" >
-					<image href="images/maps/ascent.png" width="1024" height="1024" onClick={(e) => mapClick(e)} />
-					<g id="pixel0">
-						<svg id="pixel-box">
-							<rect x="157" y="248" rx="10" ry="10" width="35" height="35" />
-						</svg>
-						<image
-							id="pixel"
-							href={_selectedAbility}
-							x="160"
-							y="250"
-							width="30px"
-							height="30px"
-						/>
-						<svg id="pixel-box">
-							<rect x="157" y="498" rx="10" ry="10" width="35" height="35" />
-						</svg>
-						<image
-							id="agent"
-							href={_agentImg}
-							x="160"
-							y="500"
-							width="30px"
-							height="30px"
-						/>
-						<line x1="175" y1="285" x2="175" y2="498" stroke-width="2" stroke="white"/>
-					</g>
-				</svg>
-			</div>
-			
+			<MapArea
+				_agentImg={_agentImg}
+				selectedAbility={selectedAbility}
+				action={action}
+				setAction={setAction}
+				pixels={pixels}
+				setPixels={setPixels}
+				_agent_id={_agent_id}
+				_agent_path={_agent_path}
+				_ability_path={_ability_path}
+				_agents={_agents}></MapArea>
 		</div>
 	);
 }
 
+function SetAgentLayout(props) {
+	return (
+		<div className="line-block">
+			<p className="line-title">1. SET AGENT POSITION</p>
+			<button className="line-button" onClick={() => setAgent(props.setAction)}>
+				<img className="line-img" src={props._agentImg} />{" "}
+				{props.action === 1 ? "PLACE AGENT ON MAP" : "SET"}
+			</button>
+		</div>
+	);
+}
 
-function mapClick(evt){
+function setAgent(setAction) {
+	setAction(1);
+}
+
+function SetAbility(props) {
+	return (
+		<div className="line-block">
+			<p className="line-title">2. SET AGENT ABILITY</p>
+			<div className="abilitys-select">
+				<button
+					className={
+						props.selectedAbility === 1 ? "ability-button-selected" : "ability-button"
+					}
+					onClick={() =>
+						changeAbility(1, props.setSelectedAbility, props.setAction)
+					}>
+					<img className="ability-img" src={props._abilitys[0]} />
+				</button>
+				<button
+					className={
+						props.selectedAbility === 2 ? "ability-button-selected" : "ability-button"
+					}
+					onClick={() =>
+						changeAbility(2, props.setSelectedAbility, props.setAction)
+					}>
+					<img className="ability-img" src={props._abilitys[1]} />
+				</button>
+				<button
+					className={
+						props.selectedAbility === 3 ? "ability-button-selected" : "ability-button"
+					}
+					onClick={() =>
+						changeAbility(3, props.setSelectedAbility, props.setAction)
+					}>
+					<img className="ability-img" src={props._abilitys[2]} />
+				</button>
+				<button
+					className={
+						props.selectedAbility === 4 ? "ability-button-selected" : "ability-button"
+					}
+					onClick={() =>
+						changeAbility(4, props.setSelectedAbility, props.setAction)
+					}>
+					<img className="ability-img" src={props._abilitys[3]} />
+				</button>
+			</div>
+		</div>
+	);
+}
+
+function changeAbility(id, setSelectedAbility, setAction) {
+	setSelectedAbility(id);
+	setAction(3);
+}
+
+function AbilityPosition(props) {
+	return (
+		<div className="line-block">
+			<p className="line-title">3. SET ABILITY POSITION</p>
+			<button className="line-button" onClick={() => setAbility(props.setAction)}>
+				<img className="line-img" src={props._ability_path+props._agents[props._agent_id]+"/"+props.selectedAbility+".png"} />
+				{props.action === 4 ? "PLACE ABILITY ON MAP" : "SET"}
+			</button>
+		</div>
+	);
+}
+function setAbility(setAction) {
+	setAction(4);
+}
+
+function VideoUrl() {
+	return (
+		<div className="line-block">
+			<p className="line-title">4. VIDEO URL</p>
+			<input placeholder="youtube.com/xxx" className="line-input"></input>
+		</div>
+	);
+}
+
+function MapArea(props) {
+	return (
+		<div className="map-img">
+			<svg id="map" width="1024" height="1024" viewBox="0 0 1536 1536">
+				<image
+					href="images/maps/ascent.png"
+					width="1024"
+					height="1024"
+					onClick={(e) => mapClick(e, props)}
+				/>
+				<LoadPixels
+					pixels={props.pixels}
+					_agent_path={props._agent_path}
+					_ability_path={props._ability_path}
+					_agents={props._agents}
+				/>
+			</svg>
+		</div>
+	);
+}
+
+function LoadPixels({ pixels, _agent_path, _ability_path, _agents }) {
+	var PixelsLayout = [];
+	for (var i = 0; i < pixels.length; i++) {
+		var pixel = [];
+		if ("agent-x" in pixels[i] && "ability-x" in pixels[i]) {
+			pixel.push(
+				<line
+					x1={parseInt(pixels[i]["ability-x"]) + 15}
+					y1={parseInt(pixels[i]["ability-y"])+30}
+					x2={parseInt(pixels[i]["agent-x"]) + 15}
+					y2={parseInt(pixels[i]["agent-y"])}
+					stroke-width="2"
+					stroke="white"
+				/>
+			);
+		}
+
+		if ("agent-x" in pixels[i]) {
+			pixel.push(
+				<svg id="pixel-box">
+					<rect
+						x={pixels[i]["agent-x"] - 3}
+						y={pixels[i]["agent-y"] - 2}
+						rx="10"
+						ry="10"
+						width="35"
+						height="35"
+					/>
+				</svg>
+			);
+			pixel.push(
+				<image
+					id="agent"
+					href={_agent_path + _agents[pixels[i]["agent-id"]] + ".png"}
+					x={pixels[i]["agent-x"]}
+					y={pixels[i]["agent-y"]}
+					width="30px"
+					height="30px"
+				/>
+			);
+		}
+		if ("ability-x" in pixels[i]) {
+			pixel.push(
+				<svg id="pixel-box">
+					<rect
+						x={pixels[i]["ability-x"] - 3}
+						y={pixels[i]["ability-y"] - 2}
+						rx="10"
+						ry="10"
+						width="35"
+						height="35"
+					/>
+				</svg>
+			);
+			pixel.push(
+				<image
+					id="agent"
+					href={
+						_ability_path +
+						_agents[pixels[i]["agent-id"]] +
+						"/" +
+						pixels[i]["ability-id"] +
+						".png"
+					}
+					x={pixels[i]["ability-x"]}
+					y={pixels[i]["ability-y"]}
+					width="30px"
+					height="30px"
+				/>
+			);
+		}
+
+		
+
+		PixelsLayout.push(<g id={"pixel" + i}>{pixel}</g>);
+	}
+
+	return PixelsLayout;
+}
+
+function mapClick(evt, props) {
 	var e = evt.target;
 	var dim = e.getBoundingClientRect();
 	var x = evt.clientX - dim.left;
 	var y = evt.clientY - dim.top;
-	alert("x: "+x+" y:"+y);
+	if (props.action === 1) {
+		placeAgent(x * 1.5 - 15, y * 1.5 - 15, props);
+	}
+	if (props.action === 4) {
+		placeAbility(x * 1.5 - 15, y * 1.5 - 15, props);
+	}
+}
+
+function placeAgent(x, y, props) {
+	var oldPixels = [...props.pixels];
+	oldPixels.push({ "agent-id": props._agent_id, "agent-x": x, "agent-y": y });
+	props.setPixels(oldPixels);
+	props.setAction(2);
+}
+
+function placeAbility(x, y, props) {
+	var oldPixels = [...props.pixels];
+	oldPixels[oldPixels.length-1]["ability-id"] = props.selectedAbility
+	oldPixels[oldPixels.length-1]["ability-x"] = x
+	oldPixels[oldPixels.length-1]["ability-y"] = y
+	props.setPixels(oldPixels);
+	props.setAction(5);
 }
 export default Map;

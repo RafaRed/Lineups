@@ -123,6 +123,13 @@
     margin-right: 5px;
     cursor: pointer;
 }
+.map-page .ability-button-selected{
+    background-color: #D4D4D4;
+    border: none;
+    border-radius: 10px;
+    margin-right: 5px;
+    cursor: pointer;
+}
 .map-page .ability-img{
     width: 25px;
     height: 25px;
