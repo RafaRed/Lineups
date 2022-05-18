@@ -12,6 +12,7 @@
     font-size: 1.5rem;
     align-items: center;
     gap: 20px;
+    cursor: pointer;
 }
 
 .logoimg{

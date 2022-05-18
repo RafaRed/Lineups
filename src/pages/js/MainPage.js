@@ -3,24 +3,23 @@ import "../css/MainPage.css";
 import { getAgents } from "../../model/agents";
 import { getMaps } from "../../model/maps";
 import injectSheet from "react-jss";
+import {Link, useNavigate} from 'react-router-dom';
 
 function MainPage(props) {
-	const [agent, setAgent] = useState("");
-	const [map, setMap] = useState("");
 	return (
 		<div className="main-page">
 			<div className="wrapper">
 				<Welcome></Welcome>
 				<SelectAgent
 					buttonStyle={props.classes.button}
-					agent={agent}
-					setAgent={setAgent}></SelectAgent>
+					agent={props.selectedAgent}
+					setAgent={props.setSelectedAgent}></SelectAgent>
 				<SelectMap
 					buttonStyle={props.classes.button}
-					map={map}
-					setMap={setMap}></SelectMap>
+					map={props.selectedMap}
+					setMap={props.setSelectedMap}></SelectMap>
 				<Load></Load>
-				<CreateNewButton buttonStyle={props.classes.buttonCreate}></CreateNewButton>
+				<CreateNewButton buttonStyle={props.classes.buttonCreate} _agent={props.selectedAgent} _map={props.selectedMap}></CreateNewButton>
 			</div>
 		</div>
 	);
@@ -124,9 +123,15 @@ function Load() {
 	);
 }
 
-function CreateNewButton({ buttonStyle }) {
+function CreateNewButton({ buttonStyle,_agent,_map}) {
+	let navigate = useNavigate(); 
+	const routeChange = () =>{ 
+		let path = `map`; 
+		navigate(path,{state:{agent:_agent,map:_map}});
+	  }
 	return (
-		<button className={["create-new", buttonStyle].join(" ")}>
+
+		<button className={["create-new", buttonStyle].join(" ")} onClick={routeChange}>
 			+ CREATE NEW
 		</button>
 	);

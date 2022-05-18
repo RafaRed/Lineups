@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from "react";
 import "../css/Map.css";
 import { PanZoom } from "react-easy-panzoom";
-
-
+import { useLocation } from "react-router-dom";
+import { getAgents } from "../../model/agents";
+import {Link, useNavigate} from 'react-router-dom';
 
 function Map() {
-	const _agent_id = 0;
-	const _agentImg = "images/agents/fade.png";
+	const location = useLocation();
+	const _agent_name = location.state !== null ? location.state.agent : undefined;
+	const _map_name = location.state !== null ? location.state.map : undefined;
+	
+	
+	const _agentImg = "images/agents/" + _agent_name + ".png";
 	const _abilitys = [
-		"images/abilitys/fade/1.png",
-		"images/abilitys/fade/2.png",
-		"images/abilitys/fade/3.png",
-		"images/abilitys/fade/4.png",
+		"images/abilitys/" + _agent_name + "/1.png",
+		"images/abilitys/" + _agent_name + "/2.png",
+		"images/abilitys/" + _agent_name + "/3.png",
+		"images/abilitys/" + _agent_name + "/4.png",
 	];
-	const _agents = ["fade"];
+	const _agents = getAgents();
 	const _agent_path = "images/agents/";
 	const _ability_path = "images/abilitys/";
 	const [action, setAction] = useState(0);
@@ -21,7 +26,7 @@ function Map() {
 	const [selectedAbility, setSelectedAbility] = useState(1);
 	const [pixels, setPixels] = useState([]);
 
-	const [addlineup,setAddlineup] = useState(false)
+	const [addlineup, setAddlineup] = useState(false);
 	return (
 		<div className="map-page">
 			<div className="block">
@@ -33,32 +38,39 @@ function Map() {
 				<div className="options-block">
 					<p className="menu-title">OPTIONS</p>
 					<button className="save-button">SAVE</button>
-					<button className="add-lineup-button" onClick={()=>setAddlineup(true)}>ADD LINEUP</button>
+					<button className="add-lineup-button" onClick={() => setAddlineup(true)}>
+						ADD LINEUP
+					</button>
 				</div>
 
-				{addlineup ? <AddLineupMenu
-					_agent_id={_agent_id}
-					_agentImg={_agentImg}
-					_abilitys={_abilitys}
-					_agents={_agents}
-					_ability_path={_ability_path}
-					action={action}
-					setAction={setAction}
-					unlockAction={unlockAction}
-					setUnlockAction={setUnlockAction}
-					selectedAbility={selectedAbility}
-					setSelectedAbility={setSelectedAbility}
-					setAddlineup={setAddlineup}></AddLineupMenu> : <></>}
+				{addlineup ? (
+					<AddLineupMenu
+						_agent_name={_agent_name}
+						_agentImg={_agentImg}
+						_abilitys={_abilitys}
+						_agents={_agents}
+						_ability_path={_ability_path}
+						action={action}
+						setAction={setAction}
+						unlockAction={unlockAction}
+						setUnlockAction={setUnlockAction}
+						selectedAbility={selectedAbility}
+						setSelectedAbility={setSelectedAbility}
+						setAddlineup={setAddlineup}></AddLineupMenu>
+				) : (
+					<></>
+				)}
 			</div>
 
 			<MapArea
+				_map_name={_map_name}
 				_agentImg={_agentImg}
 				selectedAbility={selectedAbility}
 				action={action}
 				setAction={setAction}
 				pixels={pixels}
 				setPixels={setPixels}
-				_agent_id={_agent_id}
+				_agent_name={_agent_name}
 				_agent_path={_agent_path}
 				_ability_path={_ability_path}
 				_agents={_agents}
@@ -68,7 +80,26 @@ function Map() {
 	);
 }
 
+function CheckVariablesLoaded(props){
+	const _agent_name = props._agent_name;
+	const _map_name = props._map_name;
+	let navigate = useNavigate();
+	const routeChange = () =>{ 
+		let path = "/"; 
+		navigate(path);
+	  }
+	  useEffect(()=>{
+		if(_agent_name===undefined || _map_name===undefined){
+			routeChange()
+		}
+	  })
+	
+
+	
+}
+
 function AddLineupMenu(props) {
+	
 	return (
 		<div className="lineup-block">
 			<p className="menu-title">ADD LINEUP</p>
@@ -88,20 +119,26 @@ function AddLineupMenu(props) {
 				selectedAbility={props.selectedAbility}
 				_ability_path={props._ability_path}
 				_agents={props._agents}
-				_agent_id={props._agent_id}
+				_agent_name={props._agent_name}
 				action={props.action}
 				setAction={props.setAction}
 				unlockAction={props.unlockAction}
 				setUnlockAction={props.setUnlockAction}></AbilityPosition>
 			<VideoUrl unlockAction={props.unlockAction}></VideoUrl>
-			<button className="line-add" onClick={()=>addLineupToMap(props.setAddlineup, props.setUnlockAction, props.setAction)}>ADD</button>
+			<button
+				className="line-add"
+				onClick={() =>
+					addLineupToMap(props.setAddlineup, props.setUnlockAction, props.setAction)
+				}>
+				ADD
+			</button>
 		</div>
 	);
 }
-function addLineupToMap(setAddlineup, setUnlockAction, setAction){
-	setAddlineup(false)
-	setUnlockAction(1)
-	setAction(0)
+function addLineupToMap(setAddlineup, setUnlockAction, setAction) {
+	setAddlineup(false);
+	setUnlockAction(1);
+	setAction(0);
 }
 
 function SetAgentLayout(props) {
@@ -177,7 +214,12 @@ function SetAbility(props) {
 						props.selectedAbility === 4 ? "ability-button-selected" : "ability-button"
 					}
 					onClick={() =>
-						changeAbility(4, props.setSelectedAbility, props.setAction)
+						changeAbility(
+							4,
+							props.setSelectedAbility,
+							props.setAction,
+							props.unlockAction
+						)
 					}>
 					<img className="ability-img" src={props._abilitys[3]} />
 				</button>
@@ -205,7 +247,7 @@ function AbilityPosition(props) {
 					className="line-img"
 					src={
 						props._ability_path +
-						props._agents[props._agent_id] +
+						props._agent_name +
 						"/" +
 						props.selectedAbility +
 						".png"
@@ -237,11 +279,13 @@ function VideoUrl(props) {
 }
 
 function MapArea(props) {
+	
 	return (
 		<div className="map-img">
+			<CheckVariablesLoaded _agent_name={props._agent_name} _map_name={props._map_name}/>
 			<svg id="map" width="1024" height="1024" viewBox="0 0 1536 1536">
 				<image
-					href="images/maps/ascent.png"
+					href={"images/maps/" + props._map_name + ".png"}
 					width="1024"
 					height="1024"
 					onClick={(e) => mapClick(e, props)}
@@ -290,7 +334,7 @@ function LoadPixels({ pixels, _agent_path, _ability_path, _agents }) {
 			pixel.push(
 				<image
 					id="agent"
-					href={_agent_path + _agents[pixels[i]["agent-id"]] + ".png"}
+					href={_agent_path + pixels[i]["agent-id"] + ".png"}
 					x={pixels[i]["agent-x"]}
 					y={pixels[i]["agent-y"]}
 					width="30px"
@@ -316,7 +360,7 @@ function LoadPixels({ pixels, _agent_path, _ability_path, _agents }) {
 					id="agent"
 					href={
 						_ability_path +
-						_agents[pixels[i]["agent-id"]] +
+						pixels[i]["agent-id"] +
 						"/" +
 						pixels[i]["ability-id"] +
 						".png"
@@ -361,14 +405,14 @@ function mapClick(evt, props) {
 
 function placeAgent(x, y, props) {
 	var oldPixels = [...props.pixels];
-	oldPixels.push({ "agent-id": props._agent_id, "agent-x": x, "agent-y": y });
+	oldPixels.push({ "agent-id": props._agent_name, "agent-x": x, "agent-y": y });
 	props.setPixels(oldPixels);
 	props.setAction(2);
 }
 
 function updateAgent(x, y, props) {
 	var oldPixels = [...props.pixels];
-	oldPixels[oldPixels.length - 1]["agent-id"] = props._agent_id;
+	oldPixels[oldPixels.length - 1]["agent-id"] = props._agent_name;
 	oldPixels[oldPixels.length - 1]["agent-x"] = x;
 	oldPixels[oldPixels.length - 1]["agent-y"] = y;
 	props.setPixels(oldPixels);

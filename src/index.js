@@ -1,12 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from "react-dom";
 import App from './App';
+import MapPage from './MapPage';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-
+ReactDOM.render(
+<Router>
+    <Routes>
+      <Route exact path="/" element={<App/>} />
+      <Route exact path="/map" element={<MapPage/>} />
+      </Routes>
+    </Router>,
+    document.getElementById("root")
+    );
