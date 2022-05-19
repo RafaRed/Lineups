@@ -1,6 +1,7 @@
 .map-page {
 	background-color: #161616;
 	width: 100%;
+    color:#fff;
 	padding-top: 100px;
 	display: flex;
 
@@ -31,7 +32,7 @@
 
 .map-page .save-button{
     background-color: #585349;
-
+    color:#fff;
     height: 30px;
     border: none;
     border-radius: 5px;
@@ -41,6 +42,7 @@
 
 .map-page .add-lineup-button{
     background-color: #FF4655;
+    color:#fff;
     height: 30px;
     border: none;
     border-radius: 5px;
@@ -78,6 +80,7 @@
 	padding: 20px;
 	border-radius: 10px;
     gap: 10px;
+    
 }
 
 .map-page .line-block {
@@ -116,6 +119,7 @@
 .map-page .line-button{
     margin-top: 10px;
     background-color: #FF4655;
+    color:#fff;
     border: none;
     border-radius: 10px;
     display: flex;
@@ -184,7 +188,7 @@
     padding: 10px;
     border: none;
     font-weight: 800;
-
+    color:#fff;
     background-color: #FF4655;
 }
 
