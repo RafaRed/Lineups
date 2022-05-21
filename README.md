@@ -26,7 +26,8 @@ git clone https://github.com/RafaRed/Lineups.git
 3. Create a new Unstoppable Domains Client  
 - Register in https://dashboard.auth.unstoppabledomains.com/
 - Add the creadentials in a '.env' file on "Lineups/.env" as follow
-REACT_APP_CLIENT_ID = ''
+
+REACT_APP_CLIENT_ID = ''  
 REACT_APP_REDIRECT_URI = ""  
 
 4. Install and run the project.
