@@ -21,7 +21,7 @@ git clone https://github.com/RafaRed/Lineups.git
 2. Create a new Firebase Project  
 - Before requesting the credentials create a Realtime Firebase project  
 - Add a new web app on firebase and get your creadentials  
-- Add the firebase credentials in a new 'config.jgon' file on "Lineups/server/"  
+- Add the firebase credentials in a new 'config.json' file on "Lineups/server/"  
 
 3. Create a new Unstoppable Domains Client  
 - Register in https://dashboard.auth.unstoppabledomains.com/
