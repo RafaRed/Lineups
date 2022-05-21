@@ -4,8 +4,14 @@ import { getAgents } from "../../model/agents";
 import { getMaps } from "../../model/maps";
 import injectSheet from "react-jss";
 import {Link, useNavigate} from 'react-router-dom';
+import { uauth2 } from "../../components/js/connectors"
+import { getLoadMaps } from "../../model/Calls/Database";
 
 function MainPage(props) {
+	const [maps,setMaps] = useState();
+	useEffect(()=>{
+		loadMaps(setMaps,maps);
+	},[])
 	return (
 		<div className="main-page">
 			<div className="wrapper">
@@ -18,13 +24,21 @@ function MainPage(props) {
 					buttonStyle={props.classes.button}
 					map={props.selectedMap}
 					setMap={props.setSelectedMap}></SelectMap>
-				<Load></Load>
+				<Load agent={props.selectedAgent} map={props.selectedMap} maps={maps}></Load>
 				<CreateNewButton buttonStyle={props.classes.buttonCreate} _agent={props.selectedAgent} _map={props.selectedMap}></CreateNewButton>
 			</div>
 		</div>
 	);
 }
 
+function loadMaps(setMaps,_maps){
+	uauth2.uauth.user().then(user=>{
+		getLoadMaps(user.sub).then(maps=>
+			{
+				setMaps(maps)
+			})
+	})
+}
 function Welcome() {
 	return (
 		<div className="title">
@@ -65,7 +79,7 @@ function BuildAgentsList({ buttonStyle, agents, agent, setAgent }) {
 					agent === agents[i] ? "" : buttonStyle,
 				].join(" ")}
 				onClick={()=>setAgent(_agent)}>
-				<img src={"images/agents/" + agents[i] + ".png"} />
+				<img src={"/images/agents/" + agents[i] + ".png"} />
 			</div>
 		);
 	}
@@ -112,16 +126,45 @@ function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function Load() {
+function Load({agent,map,maps}) {
 	return (
 		<div className="block">
 			<p className="block-title">
-				<span className="main-text">LOAD</span>{" "}
+				<span className="main-text">LOAD</span>
 			</p>
-			<p className="maps-found">0 maps found</p>
+			<LoadedMaps agent={agent} map={map} maps={maps}></LoadedMaps>
+			<p className="maps-found">{mapsNumber(maps,map,agent)} maps found</p>
 		</div>
 	);
 }
+
+function mapsNumber(maps,map,agent){
+	if(maps !== undefined && map in maps && agent in maps[map])
+		{return Object.keys(maps[map][agent]).length}
+		else{
+			return 0
+		}
+}
+
+function LoadedMaps(props){
+	var loadedMaps = []
+
+	if(props.maps !== undefined && (props.map !== undefined && props.agent !== undefined)){
+
+		if(props.map in props.maps && props.agent in props.maps[props.map] ){
+			var mapList = props.maps[props.map][props.agent];
+
+			for (const [key, value] of Object.entries(mapList)) {
+	
+				loadedMaps.push(<a href={"/map/"+key} key={key}><div className="map-button">{mapList[key].name}</div></a>)
+			}
+		}
+		
+	}
+	
+	return <div className="map-list">{loadedMaps}</div>;
+}
+
 
 function CreateNewButton({ buttonStyle,_agent,_map}) {
 	let navigate = useNavigate(); 

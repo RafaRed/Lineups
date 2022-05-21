@@ -40,6 +40,16 @@
     
 }
 
+.map-page .save-button-unsaved{
+    background-color: #6ec47d;
+    color:#fff;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    
+}
+
 .map-page .add-lineup-button{
     background-color: #FF4655;
     color:#fff;

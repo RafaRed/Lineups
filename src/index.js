@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import App from './App';
 import MapPage from './MapPage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
@@ -13,15 +13,15 @@ function getLibrary(provider) {
   return library
 }
 
-
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
   <Web3ReactProvider getLibrary={getLibrary}>
 <Router>
     <Routes>
       <Route exact path="/" element={<App/>} />
       <Route exact path="/map" element={<MapPage/>} />
+      <Route exact path="/map/:mapid" element={<MapPage/>} />
       </Routes>
     </Router>
     </Web3ReactProvider>,
-    document.getElementById("root")
     );

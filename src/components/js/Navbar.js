@@ -6,6 +6,7 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import { injected, walletconnect, uauth, uauth2 } from "./connectors"
 import { useWeb3React } from "@web3-react/core";
+import { createUdAccount } from "../../model/Calls/Database";
 
 const styles = {
 	dropdownContent: {
@@ -32,14 +33,17 @@ function Navbar(props) {
 		navigate(path);
 	};
 	const [showMenu, setShowMenu] = useState(false);
+	const [isConnected,setIsConnected] = useState(false)
+	const [domain,setDomain] = useState("")
+	fetchData(isConnected,setDomain,setIsConnected)
 	return (
 		<div className="navbar">
 			<div className="logo" onClick={routeChange}>
-				<img className="logoimg" src="images/logo.png"></img>
+				<img className="logoimg" src="/images/logo.png"></img>
 				<p>LINEUPS</p>
 			</div>
 			<div className="login">
-				<button onClick={onOpenModal}>Login</button>
+				<button onClick={isConnected ? ()=>logout(props.web3ReactHook,setIsConnected,setDomain) : onOpenModal}>{isConnected ? domain : "Login"}</button>
 				<div>
 					<Modal open={open} onClose={onCloseModal} center>
 						<div className="login-panel">
@@ -51,7 +55,7 @@ function Navbar(props) {
 								onMouseLeave={() => setUdLoginState(0)}
 								onMouseDown={() => setUdLoginState(2)}
 								className={["ud-login", props.classes.udLogin].join(" ")}
-								onClick={()=> connectUnstoppable(props.web3ReactHook)}
+								onClick={()=> connectUnstoppable(props.web3ReactHook,setOpen)}
 							/>
 						</div>
 					</Modal>
@@ -71,16 +75,17 @@ function withUseWeb3React(Component) {
 function getUdLoginButton(state) {
 	switch (state) {
 		case 0:
-			return "images/login/ud.png";
+			return "/images/login/ud.png";
 		case 1:
-			return "images/login/ud-hover.png";
+			return "/images/login/ud-hover.png";
 		case 2:
-			return "images/login/ud-pressed.png";
+			return "/images/login/ud-pressed.png";
 	}
 }
 
-async function connectUnstoppable(web3ReactHook) {
+async function connectUnstoppable(web3ReactHook,setOpen) {
     injected.deactivate();
+	setOpen(false);
     web3ReactHook
       .activate(uauth, null, true)
       
@@ -89,6 +94,10 @@ async function connectUnstoppable(web3ReactHook) {
           .getAccount()
 
           .then((account) => {
+			uauth.uauth.user().then(user=>{
+				createUdAccount(user.sub)
+			}) 
+			
           })
           .catch((e) => {
             alert(e);
@@ -100,4 +109,34 @@ async function connectUnstoppable(web3ReactHook) {
         console.error(e);
       });
   }
+
+  function fetchData(isConnected,setDomain,setIsConnected){
+    uauth2.uauth.user()
+    .then((data) => {
+      if (data) {
+        if(isConnected === false){
+			setIsConnected(true);
+			setDomain(localStorage.getItem("uauth-default-username"))
+        }
+        
+      } else {
+
+      }
+    })
+    .catch((_err) => {});
+  }
+
+  function logout(web3ReactHook,setIsConnected,setDomain) {
+	setIsConnected(false);
+	setDomain("")
+    uauth2.uauth.logout();
+    web3ReactHook.deactivate();
+    injected.deactivate();
+    uauth.deactivate();
+    window.location.reload(false);
+	
+
+    
+  }
+
 export default injectSheet(styles)(withUseWeb3React(Navbar));

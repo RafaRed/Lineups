@@ -117,4 +117,25 @@
 	font-size: 2rem;
 	box-shadow: 2px 3px 5px #1d1d1d;
 	cursor: pointer;
+	color: #fff;
+}
+
+
+.main-page .map-list {
+	margin-top: 30px;
+	
+}
+
+.main-page .map-list .map-button{
+	background-color: #424242;
+	padding: 10px;
+	border-radius: 10px;
+	color: #fff;
+	margin-bottom: 20px;
+	cursor: pointer;
+}
+
+.main-page .map-list a{
+	color:#fff;
+	text-decoration: none;
 }

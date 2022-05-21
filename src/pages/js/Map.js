@@ -1,32 +1,43 @@
 import React, { useState, useEffect } from "react";
 import "../css/Map.css";
-import { PanZoom } from "react-easy-panzoom";
+
 import { useLocation } from "react-router-dom";
 import { getAgents } from "../../model/agents";
-import {Link, useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
+import { createMap, getLoadMap, setUpdateMap } from "../../model/Calls/Database";
+import { uauth2 } from "../../components/js/connectors"
+import { useParams } from "react-router-dom";
 
 function Map() {
+	const params = useParams();
 	const location = useLocation();
-	const _agent_name = location.state !== null ? location.state.agent : undefined;
-	const _map_name = location.state !== null ? location.state.map : undefined;
+	const map_id = params.mapid;
+	const [_agent_name,set_agent_name] = useState(location.state !== null ? location.state.agent : undefined);
+	const [_map_name,set_map_name] = useState(location.state !== null ? location.state.map : undefined);
+	const [mapOwner,setMapOwner] = useState(map_id === undefined ? true : false)
 	
-	
-	const _agentImg = "images/agents/" + _agent_name + ".png";
+	const _agentImg = "/images/agents/" + _agent_name + ".png";
 	const _abilitys = [
-		"images/abilitys/" + _agent_name + "/1.png",
-		"images/abilitys/" + _agent_name + "/2.png",
-		"images/abilitys/" + _agent_name + "/3.png",
-		"images/abilitys/" + _agent_name + "/4.png",
+		"/images/abilitys/" + _agent_name + "/1.png",
+		"/images/abilitys/" + _agent_name + "/2.png",
+		"/images/abilitys/" + _agent_name + "/3.png",
+		"/images/abilitys/" + _agent_name + "/4.png",
 	];
 	const _agents = getAgents();
-	const _agent_path = "images/agents/";
-	const _ability_path = "images/abilitys/";
+	const _agent_path = "/images/agents/";
+	const _ability_path = "/images/abilitys/";
 	const [action, setAction] = useState(0);
 	const [unlockAction, setUnlockAction] = useState(0);
 	const [selectedAbility, setSelectedAbility] = useState(1);
 	const [pixels, setPixels] = useState([]);
-
+	const [unsaved, setUnsaved] = useState(false)
+	const create_new_map = true;
 	const [addlineup, setAddlineup] = useState(false);
+	useEffect(()=>{
+		loadMap(set_agent_name,set_map_name,map_id,setPixels,setMapOwner)
+	},[])
+	
+	
 	return (
 		<div className="map-page">
 			<div className="block">
@@ -34,10 +45,11 @@ function Map() {
 				<p>Author</p>
 			</div>
 
+			{ mapOwner === false ? <></> :
 			<div className="config-block">
 				<div className="options-block">
 					<p className="menu-title">OPTIONS</p>
-					<button className="save-button">SAVE</button>
+					<button className={unsaved === true ? "save-button-unsaved" : "save-button"} onClick={()=>saveMapClick(create_new_map,map_id,setUnsaved,pixels,_agent_name,_map_name)}>SAVE</button>
 					<button className="add-lineup-button" onClick={() => setAddlineup(true)}>
 						ADD LINEUP
 					</button>
@@ -56,11 +68,12 @@ function Map() {
 						setUnlockAction={setUnlockAction}
 						selectedAbility={selectedAbility}
 						setSelectedAbility={setSelectedAbility}
+						setUnsaved={setUnsaved}
 						setAddlineup={setAddlineup}></AddLineupMenu>
 				) : (
 					<></>
 				)}
-			</div>
+			</div>}
 
 			<MapArea
 				_map_name={_map_name}
@@ -75,10 +88,53 @@ function Map() {
 				_ability_path={_ability_path}
 				_agents={_agents}
 				unlockAction={unlockAction}
+				map_id={map_id}
 				setUnlockAction={setUnlockAction}></MapArea>
 		</div>
 	);
 }
+
+function saveMapClick(create_new_map,map_id,setUnsaved,pixels,_agent_name,_map_name){
+	if(map_id === undefined){
+		saveMap(create_new_map,map_id,setUnsaved,pixels,_agent_name,_map_name)
+	}
+	else{
+		updateMap(create_new_map,map_id,setUnsaved,pixels,_agent_name,_map_name)
+	}
+}
+
+function loadMap(set_agent_name,set_map_name,map_id,setPixels,setMapOwner){
+	getLoadMap(map_id).then(data=>{
+		console.log(data)
+		set_agent_name(data.agentName)
+		set_map_name(data.mapName)
+		setPixels(data.pixels)
+		uauth2.uauth.user().then(user=>{
+			if(user.sub===data.username.replace("*",".")){
+				setMapOwner(true)
+			}
+		})
+	})
+
+}
+function saveMap(create_map_path,map_id,setUnsaved,pixels,agentName,mapName){
+	setUnsaved(false)
+	uauth2.uauth.user().then(user=>{
+		createMap(user.sub,pixels,agentName,mapName).then(mapid=>{
+			window.location.href = '/map/'+mapid;
+		})
+	}) 
+	
+}
+
+function updateMap(create_map_path,map_id,setUnsaved,pixels,agentName,mapName){
+	setUnsaved(false)
+	uauth2.uauth.user().then(user=>{
+		setUpdateMap(user.sub,pixels,agentName,mapName,map_id)
+	}) 
+	
+}
+
 
 function CheckVariablesLoaded(props){
 	const _agent_name = props._agent_name;
@@ -90,7 +146,9 @@ function CheckVariablesLoaded(props){
 	  }
 	  useEffect(()=>{
 		if(_agent_name===undefined || _map_name===undefined){
-			routeChange()
+			if(props.map_id === undefined){
+				routeChange()
+			}
 		}
 	  })
 	
@@ -128,17 +186,18 @@ function AddLineupMenu(props) {
 			<button
 				className="line-add"
 				onClick={() =>
-					addLineupToMap(props.setAddlineup, props.setUnlockAction, props.setAction)
+					addLineupToMap(props.setAddlineup, props.setUnlockAction, props.setAction,props.setUnsaved)
 				}>
 				ADD
 			</button>
 		</div>
 	);
 }
-function addLineupToMap(setAddlineup, setUnlockAction, setAction) {
+function addLineupToMap(setAddlineup, setUnlockAction, setAction,setUnsaved) {
 	setAddlineup(false);
 	setUnlockAction(1);
 	setAction(0);
+	setUnsaved(true)
 }
 
 function SetAgentLayout(props) {
@@ -282,14 +341,15 @@ function MapArea(props) {
 	
 	return (
 		<div className="map-img">
-			<CheckVariablesLoaded _agent_name={props._agent_name} _map_name={props._map_name}/>
+			<CheckVariablesLoaded _agent_name={props._agent_name} _map_name={props._map_name} map_id={props.map_id}/>
 			<svg id="map" width="1024" height="1024" viewBox="0 0 1536 1536">
-				<image
-					href={"images/maps/" + props._map_name + ".png"}
+			{props._map_name === undefined ?<></>: <image
+					href={"/images/maps/" + props._map_name + ".png"}
 					width="1024"
 					height="1024"
 					onClick={(e) => mapClick(e, props)}
-				/>
+				/>}
+				
 				<LoadPixels
 					pixels={props.pixels}
 					_agent_path={props._agent_path}
@@ -308,11 +368,12 @@ function LoadPixels({ pixels, _agent_path, _ability_path, _agents }) {
 		if ("agent-x" in pixels[i] && "ability-x" in pixels[i]) {
 			pixel.push(
 				<line
+				key={i+"_0"}
 					x1={parseInt(pixels[i]["ability-x"]) + 15}
 					y1={parseInt(pixels[i]["ability-y"]) + 30}
 					x2={parseInt(pixels[i]["agent-x"]) + 15}
 					y2={parseInt(pixels[i]["agent-y"])}
-					stroke-width="2"
+					strokeWidth="2"
 					stroke="white"
 				/>
 			);
@@ -320,7 +381,7 @@ function LoadPixels({ pixels, _agent_path, _ability_path, _agents }) {
 
 		if ("agent-x" in pixels[i]) {
 			pixel.push(
-				<svg id="pixel-box">
+				<svg id="pixel-box" key={i+"_1"}>
 					<rect
 						x={pixels[i]["agent-x"] - 3}
 						y={pixels[i]["agent-y"] - 2}
@@ -339,12 +400,13 @@ function LoadPixels({ pixels, _agent_path, _ability_path, _agents }) {
 					y={pixels[i]["agent-y"]}
 					width="30px"
 					height="30px"
+					key={i+"_2"}
 				/>
 			);
 		}
 		if ("ability-x" in pixels[i]) {
 			pixel.push(
-				<svg id="pixel-box">
+				<svg id="pixel-box" key={i+"_3"}>
 					<rect
 						x={pixels[i]["ability-x"] - 3}
 						y={pixels[i]["ability-y"] - 2}
@@ -352,11 +414,13 @@ function LoadPixels({ pixels, _agent_path, _ability_path, _agents }) {
 						ry="10"
 						width="35"
 						height="35"
+						
 					/>
 				</svg>
 			);
 			pixel.push(
 				<image
+				key={i+"_4"}
 					id="agent"
 					href={
 						_ability_path +
@@ -373,7 +437,7 @@ function LoadPixels({ pixels, _agent_path, _ability_path, _agents }) {
 			);
 		}
 
-		PixelsLayout.push(<g id={"pixel" + i}>{pixel}</g>);
+		PixelsLayout.push(<g key={i+"__0"} id={"pixel" + i}>{pixel}</g>);
 	}
 
 	return PixelsLayout;
@@ -387,8 +451,10 @@ function mapClick(evt, props) {
 	if (props.action === 1) {
 		if (props.unlockAction > 2) {
 			updateAgent(x * 1.5 - 15, y * 1.5 - 15, props);
+
 		} else {
 			placeAgent(x * 1.5 - 15, y * 1.5 - 15, props);
+
 		}
 
 		if (props.unlockAction < 3) {
@@ -397,6 +463,7 @@ function mapClick(evt, props) {
 	}
 	if (props.action === 4) {
 		placeAbility(x * 1.5 - 15, y * 1.5 - 15, props);
+		
 		if (props.unlockAction < 5) {
 			props.setUnlockAction(5);
 		}

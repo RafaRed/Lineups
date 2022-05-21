@@ -1,0 +1,7 @@
+export const server = "https://lineupsdb.web.app"
+//export const server = "http://localhost:8080"
+export const create_ud_account_path = "/create-ud-account"
+export const create_map_path = "/create-map"
+export const load_map_path = "/load-map"
+export const load_maps_path = "/load-maps"
+export const update_map_path = "/update-map"
