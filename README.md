@@ -1,13 +1,13 @@
 # LINEUPS
 ![LINEUPS LOGO](https://i.imgur.com/6Tjq3XB.png)
 ## Summary
-A web application that allows the user to connect through Unstoppable Domains and claim a small block of the site. Each user will be able to redeem only one block through their Unstoppable Domains, thus being able to customize it by adding an image and URL for the block they claimed.
+Lineups is an web application for the Valorant game, that enable you to create and share lineups easily.
     
 ## Link to working code in a public repo
-https://github.com/RafaRed/fragmented  
+https://github.com/RafaRed/Lineups  
 
 ## Live Demo
-https://fragmented.vercel.app/  
+https://lineups.vercel.app/  
 
 ## Video Demo
 [![Video Demo](http://img.youtube.com/vi/1G4AyErn3k/0.jpg)](https://www.youtube.com/watch?v=1G4AyErn3k)
