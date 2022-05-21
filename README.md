@@ -10,7 +10,8 @@ https://github.com/RafaRed/Lineups
 https://lineups.vercel.app/  
 
 ## Video Demo
-[![Video Demo](http://img.youtube.com/vi/1G4AyErn3k/0.jpg)](https://www.youtube.com/watch?v=1G4AyErn3kw)
+[![Video Demo](http://img.youtube.com/vi/1G4AyErn3kw/0.jpg)](https://www.youtube.com/watch?v=1G4AyErn3kw)
+
 https://www.youtube.com/watch?v=1G4AyErn3k
 ## Local Installation  
 1. Download the files
