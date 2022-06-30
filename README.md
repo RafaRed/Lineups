@@ -12,7 +12,7 @@ https://lineups.vercel.app/
 ## Video Demo
 [![Video Demo](http://img.youtube.com/vi/1G4AyErn3kw/0.jpg)](https://www.youtube.com/watch?v=1G4AyErn3kw)
 
-https://www.youtube.com/watch?v=1G4AyErn3k
+https://www.youtube.com/watch?v=1G4AyErn3kw
 ## Local Installation  
 1. Download the files
 ```
