@@ -45,3 +45,13 @@ Rafael Souza#2474
 **UnstoppableDomain registered account email address:**  
 rafaelszcardoso@gmail.com  
 
+
+## Todo
+- [ ] Google login button
+- [ ] Start with Login Page
+- [ ] Drag and Drop
+- [ ] Delete lineups
+- [ ] Remove a lineup
+- [ ] Show lineups per agent
+- [ ] Show lineups per map
+
