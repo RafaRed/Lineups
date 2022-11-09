@@ -6,11 +6,19 @@ import injectSheet from "react-jss";
 import {Link, useNavigate} from 'react-router-dom';
 import { uauth2 } from "../../components/js/connectors"
 import { getLoadMaps } from "../../model/Calls/Database";
+import {getUsername} from '../../model/Calls/Login'
+
 
 function MainPage(props) {
 	const [maps,setMaps] = useState();
+	const [username,setUsername] = useState(undefined);
 	useEffect(()=>{
-		loadMaps(setMaps,maps);
+		getUsername().then(user=>{
+			setUsername(user)
+			loadMaps(setMaps,maps,user);
+		})
+		
+		
 	},[])
 	return (
 		<div className="main-page">
@@ -31,13 +39,14 @@ function MainPage(props) {
 	);
 }
 
-function loadMaps(setMaps,_maps){
-	uauth2.uauth.user().then(user=>{
-		getLoadMaps(user.sub).then(maps=>
-			{
-				setMaps(maps)
-			})
+function loadMaps(setMaps,_maps,username){
+
+	getLoadMaps(username).then(maps=>
+	{
+		console.log(maps)
+		setMaps(maps)
 	})
+
 }
 function Welcome() {
 	return (

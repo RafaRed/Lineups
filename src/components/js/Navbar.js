@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import injectSheet from "react-jss";
@@ -7,6 +7,8 @@ import { Modal } from "react-responsive-modal";
 import { injected, walletconnect, uauth, uauth2 } from "./connectors"
 import { useWeb3React } from "@web3-react/core";
 import { createUdAccount } from "../../model/Calls/Database";
+import { signInWithGoogle, signOut } from '../../services/firebase';
+import firebase from '../../services/firebase';
 
 const styles = {
 	dropdownContent: {
@@ -35,28 +37,40 @@ function Navbar(props) {
 	const [showMenu, setShowMenu] = useState(false);
 	const [isConnected,setIsConnected] = useState(false)
 	const [domain,setDomain] = useState("")
-	fetchData(isConnected,setDomain,setIsConnected)
+	useEffect(() => {
+		if(isConnected === false){
+			firebase.auth().onAuthStateChanged(user => {
+				setDomain(user.email);
+				setIsConnected(true);
+			  })
+		}
+	  }, [])
+	
+	//fetchData(isConnected,setDomain,setIsConnected)
+	
 	return (
+		
 		<div className="navbar">
 			<div className="logo" onClick={routeChange}>
 				<img className="logoimg" src="/images/logo.png"></img>
 				<p>LINEUPS</p>
 			</div>
 			<div className="login">
-				<button onClick={isConnected ? ()=>logout(props.web3ReactHook,setIsConnected,setDomain) : onOpenModal}>{isConnected ? domain : "Login"}</button>
+				<button onClick={isConnected ? ()=>logout(props.web3ReactHook,setIsConnected,setDomain,firebase) : onOpenModal}><p>{isConnected ? domain : "Login"}</p></button>
 				<div>
 					<Modal open={open} onClose={onCloseModal} center>
 						<div className="login-panel">
 							<h2>Login</h2>
 							<hr class="solid"></hr>
-							<img
+							{/*<img
 								src={getUdLoginButton(udLoginState)}
 								onMouseOver={() => setUdLoginState(1)}
 								onMouseLeave={() => setUdLoginState(0)}
 								onMouseDown={() => setUdLoginState(2)}
 								className={["ud-login", props.classes.udLogin].join(" ")}
 								onClick={()=> connectUnstoppable(props.web3ReactHook,setOpen)}
-							/>
+							/>*/}
+							<button className="button" onClick={()=>{signInWithGoogle(); setOpen(false)}}><i className="fab fa-google"></i>Sign in with google</button>
 						</div>
 					</Modal>
 				</div>
@@ -126,14 +140,15 @@ async function connectUnstoppable(web3ReactHook,setOpen) {
     .catch((_err) => {});
   }
 
-  function logout(web3ReactHook,setIsConnected,setDomain) {
+  function logout(web3ReactHook,setIsConnected,setDomain,firebase) {
 	setIsConnected(false);
 	setDomain("")
-    uauth2.uauth.logout();
+    /*uauth2.uauth.logout();
     web3ReactHook.deactivate();
     injected.deactivate();
     uauth.deactivate();
-    window.location.reload(false);
+    window.location.reload(false);*/
+	signOut();
 	
 
     

@@ -31,12 +31,27 @@
     background-color: #FDFDFD;
     border: none;
     border-radius: 10px;
-    width: 200px;
     height: 30px;
+    width: 200px;
+
+
     color: #000;
 
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 1rem;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+}
+.login button p{
+  justify-items:center;
+  width: 150px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
 }
 .login-panel{
   width: 500px;

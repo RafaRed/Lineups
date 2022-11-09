@@ -13,11 +13,11 @@ export async function createUdAccount(username) {
 	});
 }
 
-export async function createMap(_username,_pixels,_agentName,_mapName) {
+export async function createMap(_username,_pixels,_agentName,_mapName,_lineupName) {
 	const requestOptions = {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({username:_username, pixels:_pixels,agentName:_agentName,mapName:_mapName}),
+		body: JSON.stringify({username:_username, pixels:_pixels,agentName:_agentName,mapName:_mapName,name:_lineupName}),
 	};
 	return new Promise((resolve, reject) => {
 		fetch(server + create_map_path, requestOptions)
@@ -52,11 +52,11 @@ export async function getLoadMaps(_username) {
 	});
 }
 
-export async function setUpdateMap(_username,_pixels,_agentName,_mapName,_map_id) {
+export async function setUpdateMap(_username,_pixels,_agentName,_mapName,_map_id,_lineupName) {
 	const requestOptions = {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify({username:_username, pixels:_pixels,agentName:_agentName,mapName:_mapName,mapId:_map_id}),
+		body: JSON.stringify({username:_username, pixels:_pixels,agentName:_agentName,mapName:_mapName,mapId:_map_id,name:_lineupName}),
 	};
 	return new Promise((resolve, reject) => {
 		fetch(server + update_map_path, requestOptions)

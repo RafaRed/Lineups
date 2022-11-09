@@ -201,7 +201,12 @@
     color:#fff;
     background-color: #FF4655;
 }
+.map-page .line-input::placeholder{
 
+    color:#fff;
+    opacity:0.5;
+
+}
 .map-page .line-add{
     height: 40px;
     background-color: #FF4655;
@@ -223,4 +228,19 @@
 
 #agent{
     cursor: pointer;
+}
+.input-name{
+    border: none; 
+    border-width: 0; 
+    box-shadow: none;
+    background:none;
+    color:#fff;
+    font-size:1rem;
+    border-bottom: 2px solid #ff4655;
+    padding-bottom:5px;
+
+}
+
+.input-name:focus{
+    outline: none;
 }

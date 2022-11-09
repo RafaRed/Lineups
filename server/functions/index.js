@@ -61,13 +61,14 @@ app.post("/create-map", (req, res) => {
     var _agentName = req.body.agentName;
     var _mapName = req.body.mapName;
     var _pixels = req.body.pixels;
+    var _name = req.body.name;
     var timestamp = Date.now();
     var ref = db.ref("/maps");
     const mapRef = ref.push();
-    mapRef.set({username:_username,agentName:_agentName,mapName:_mapName,pixels:_pixels,creation_date:timestamp})
+    mapRef.set({username:_username,agentName:_agentName,mapName:_mapName,pixels:_pixels,creation_date:timestamp, name:_name})
     var mapKey = mapRef.key;
     var usersRef = db.ref("/users/"+_username+"/maps/"+_mapName+"/"+_agentName+"/"+mapKey);
-    usersRef.set({name:"undefined", timestamp:timestamp})
+    usersRef.set({name:_name, timestamp:timestamp})
     res.json(mapKey);
 });
 
@@ -99,16 +100,19 @@ app.post("/update-map", (req, res) => {
     var _pixels = req.body.pixels;
     var _mapId = req.body.mapId;
     var timestamp = Date.now();
+    var _name = req.body.name;
 
     var ref = db.ref("/maps/"+_mapId);
 		ref.once("value", function (snapshot) {
 			var data = snapshot.val();
             if(data.username===_username){
                 var mapRef = db.ref("/maps/"+_mapId);
-                mapRef.update({username:_username,agentName:_agentName,mapName:_mapName,pixels:_pixels,update_date:timestamp})
+                mapRef.update({username:_username,agentName:_agentName,mapName:_mapName,pixels:_pixels,update_date:timestamp, name:_name})
                 res.json({status:"success"})
             }
 		});
+        var usersRef = db.ref("/users/"+_username+"/maps/"+_mapName+"/"+_agentName+"/"+_mapId);
+        usersRef.set({name:_name, timestamp:timestamp})
     
 
 });
