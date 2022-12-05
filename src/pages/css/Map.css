@@ -234,20 +234,6 @@
     position:absolute;
 }
 
-#agent:hover{
-    color:#000;
-    background-color:#000;
-    fill:#000;
-    stroke: #000;
-}
-
-#pixel-box:hover{
-    color:#000;
-    background-color:#000;
-    fill:#000;
-    stroke: #000;
-}
-
 
 .input-name{
     border: none; 
