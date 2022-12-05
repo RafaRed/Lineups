@@ -166,7 +166,7 @@ function videoWrapper(url) {
 			break;
 		}
 	}
-	console.log(videoData)
+
 	return videoData;
 }
 
@@ -210,7 +210,7 @@ function saveMapClick(
 
 function loadMap(set_agent_name, set_map_name, map_id, setPixels, setMapOwner, username, setAuthor, setLineupName) {
 		getLoadMap(map_id).then((data) => {
-		console.log(data);
+
 		if(data !== null){
 			set_agent_name(data.agentName);
 			set_map_name(data.mapName);
@@ -501,10 +501,8 @@ function MapArea(props) {
 	);
 }
 
-function showVideo(setVideoData,setVideoOpen,url,e){
-	console.log(e)
+function showVideo(setVideoData,setVideoOpen,url){
 	if(url !== undefined){
-		console.log(url)
 		setVideoData(videoWrapper(url))
 		setVideoOpen(true)
 	}
@@ -525,8 +523,6 @@ function LoadPixels({
 	for (var i = 0; i < pixels.length; i++) {
 		var pixel = [];
 		const url = pixels[i]["url"]
-		console.log(url)
-
 		if ("agent-x" in pixels[i] && "ability-x" in pixels[i]) {
 			pixel.push(
 				<line
@@ -545,7 +541,7 @@ function LoadPixels({
 			pixel.push(
 				<svg id="pixel-box" key={i + "_1"}>
 					<rect
-						onClick={(e) => showVideo(setVideoData,setVideoOpen,url,e)}
+						onClick={(e) => showVideo(setVideoData,setVideoOpen,url)}
 						x={pixels[i]["agent-x"] - 3}
 						y={pixels[i]["agent-y"] - 2}
 						rx="10"
@@ -557,7 +553,7 @@ function LoadPixels({
 			);
 			pixel.push(
 				<image
-				onClick={(e) => showVideo(setVideoData,setVideoOpen,url,e)}
+				onClick={(e) => showVideo(setVideoData,setVideoOpen,url)}
 					id="agent"
 					href={_agent_path + pixels[i]["agent-id"] + ".png"}
 					x={pixels[i]["agent-x"]}
@@ -570,7 +566,7 @@ function LoadPixels({
 		}
 		if ("ability-x" in pixels[i]) {
 			pixel.push(
-				<svg id="pixel-box" key={i + "_3"} onClick={(e) => showVideo(setVideoData,setVideoOpen,url,e)}>
+				<svg id="pixel-box" key={i + "_3"} onClick={(e) => showVideo(setVideoData,setVideoOpen,url)}>
 					<rect
 						x={pixels[i]["ability-x"] - 3}
 						y={pixels[i]["ability-y"] - 2}
@@ -584,7 +580,7 @@ function LoadPixels({
 			);
 			pixel.push(
 				<image
-				onClick={(e) => showVideo(setVideoData,setVideoOpen,url,e)}
+				onClick={(e) => showVideo(setVideoData,setVideoOpen,url)}
 					key={i + "_4"}
 					id="agent"
 					href={
@@ -608,7 +604,6 @@ function LoadPixels({
 			</g>
 		);
 	}
-	//console.log(PixelsLayout)
 	return PixelsLayout;
 }
 
