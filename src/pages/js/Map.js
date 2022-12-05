@@ -501,8 +501,10 @@ function MapArea(props) {
 	);
 }
 
-function showVideo(setVideoData,setVideoOpen,url){
+function showVideo(setVideoData,setVideoOpen,url,e){
+	console.log(e)
 	if(url !== undefined){
+		console.log(url)
 		setVideoData(videoWrapper(url))
 		setVideoOpen(true)
 	}
@@ -522,10 +524,8 @@ function LoadPixels({
 	var PixelsLayout = [];
 	for (var i = 0; i < pixels.length; i++) {
 		var pixel = [];
-		var url = undefined
-		if(pixels[i].hasOwnProperty("url")){
-			url = pixels[i]["url"]
-		}
+		const url = pixels[i]["url"]
+		console.log(url)
 
 		if ("agent-x" in pixels[i] && "ability-x" in pixels[i]) {
 			pixel.push(
@@ -545,7 +545,7 @@ function LoadPixels({
 			pixel.push(
 				<svg id="pixel-box" key={i + "_1"}>
 					<rect
-						onClick={() => showVideo(setVideoData,setVideoOpen,url)}
+						onClick={(e) => showVideo(setVideoData,setVideoOpen,url,e)}
 						x={pixels[i]["agent-x"] - 3}
 						y={pixels[i]["agent-y"] - 2}
 						rx="10"
@@ -557,7 +557,7 @@ function LoadPixels({
 			);
 			pixel.push(
 				<image
-				onClick={() => showVideo(setVideoData,setVideoOpen,url)}
+				onClick={(e) => showVideo(setVideoData,setVideoOpen,url,e)}
 					id="agent"
 					href={_agent_path + pixels[i]["agent-id"] + ".png"}
 					x={pixels[i]["agent-x"]}
@@ -570,7 +570,7 @@ function LoadPixels({
 		}
 		if ("ability-x" in pixels[i]) {
 			pixel.push(
-				<svg id="pixel-box" key={i + "_3"} onClick={() => showVideo(setVideoData,setVideoOpen,url)}>
+				<svg id="pixel-box" key={i + "_3"} onClick={(e) => showVideo(setVideoData,setVideoOpen,url,e)}>
 					<rect
 						x={pixels[i]["ability-x"] - 3}
 						y={pixels[i]["ability-y"] - 2}
@@ -578,12 +578,13 @@ function LoadPixels({
 						ry="10"
 						width="35"
 						height="35"
+						url={url}
 					/>
 				</svg>
 			);
 			pixel.push(
 				<image
-				onClick={() => showVideo(setVideoData,setVideoOpen,url)}
+				onClick={(e) => showVideo(setVideoData,setVideoOpen,url,e)}
 					key={i + "_4"}
 					id="agent"
 					href={
@@ -607,7 +608,7 @@ function LoadPixels({
 			</g>
 		);
 	}
-
+	//console.log(PixelsLayout)
 	return PixelsLayout;
 }
 
