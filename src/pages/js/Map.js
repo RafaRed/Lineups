@@ -149,6 +149,7 @@ function Map() {
 				setVideoOpen={setVideoOpen}
 				setVideoData={setVideoData}
 				videoData={videoData}
+				addlineup={addlineup}
 				></MapArea>
 		</div>
 	);
@@ -472,6 +473,7 @@ function MapArea(props) {
 				_map_name={props._map_name}
 				map_id={props.map_id}
 			/>
+			{(props.action === 1 || props.action === 4) ? <svg id="map-click" width="1024" height="1024" viewBox="0 0 1536 1536" onClick={(e) => mapClick(e, props)}></svg> : ""}
 			<svg id="map" width="1024" height="1024" viewBox="0 0 1536 1536">
 				{props._map_name === undefined ? (
 					<></>
@@ -480,7 +482,7 @@ function MapArea(props) {
 						href={"/images/maps/" + props._map_name + ".png"}
 						width="1024"
 						height="1024"
-						onClick={(e) => mapClick(e, props)}
+						
 					/>
 				)}
 
@@ -491,6 +493,8 @@ function MapArea(props) {
 					_agents={props._agents}
 					setVideoOpen={props.setVideoOpen}
 					setVideoData={props.setVideoData}
+					addlineup={props.addlineup}
+					action={props.action}
 				/>
 			</svg>
 		</div>
@@ -511,12 +515,18 @@ function LoadPixels({
 	_ability_path,
 	_agents,
 	setVideoOpen,
-	setVideoData
+	setVideoData,
+	addlineup,
+	action
 }) {
 	var PixelsLayout = [];
 	for (var i = 0; i < pixels.length; i++) {
 		var pixel = [];
-		var url = pixels[i]["url"]
+		var url = undefined
+		if(pixels[i].hasOwnProperty("url")){
+			url = pixels[i]["url"]
+		}
+
 		if ("agent-x" in pixels[i] && "ability-x" in pixels[i]) {
 			pixel.push(
 				<line

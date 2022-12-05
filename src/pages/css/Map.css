@@ -229,6 +229,9 @@
 #agent{
     cursor: pointer;
 }
+#map-click{
+    position:absolute;
+}
 .input-name{
     border: none; 
     border-width: 0; 
